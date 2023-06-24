@@ -19,9 +19,14 @@ void main() {
     				result = 0;
         
     				while ( num+1 > cont ) {
-        	  	result = result + cont;
-        	  	cont = cont + 1;
-       			}
+						result = result + cont;
+						cont = cont + 1;
+						break;
+					}
+
+					if(atual < 2)
+						write("atual eh menor q 2");
+						continue;
 
     				write("Valor do somatorio de 1 a ", num);
     				write("    --> resultado: ", result);

@@ -374,7 +374,9 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 	}
 
    private void geraInicio() {
-			System.out.println(".text\n\n#\t nome COMPLETO e matricula dos componentes do grupo...\n#\n"); 
+			System.out.println(".text\n\n#\t Alessandra Ribeiro Schleder de Borba - 17200013-5 \n
+			Lucas Pereira Salbego - 17202261-8\n
+			Thiago Gomes Vidal de Mello - 18111112-1 \n#\n"); 
 			System.out.println(".GLOBL _start\n\n");  
    }
 
