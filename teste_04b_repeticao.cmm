@@ -13,7 +13,7 @@ void main() {
         fim = num;
     		atual = 1;
     		
-        while (fim+1 > atual) {
+        Do {
     				num = atual;
     				cont = 1;
     				result = 0;
@@ -33,7 +33,7 @@ void main() {
     				write("    --> resultado: ", result);
     				
     				atual = atual + 1;
-        }
+        } while (fim+1 > atual);
     }    
  } 
 

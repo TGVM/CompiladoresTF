@@ -120,11 +120,8 @@ cmd :  exp	';' {  System.out.println("\tPOPL %EDX	");
 			pRot.pop();
 							
 		} 
-	| {System.out.println("teste-1");}
-		FOR {System.out.println("Oscar Alho");}	'(' ExpOpc ';' {
-			System.out.println("teste1");
+	| FOR '(' ExpOpc ';' {
 			System.out.println("\tPOPL %EAX");
-			System.out.println("teste2");
 			pRot.push(proxRot);  proxRot += 4; isWhile=false;
 			System.out.printf("rot_%02d:\n",pRot.peek());
 			} 
@@ -239,11 +236,9 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 
 		| BREAK {
 					//ir pro rótulo de fora do laço
-					if(isWhile){
+					
 						System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek() + 1);
-					}else{
-						System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek() + 2);
-					}
+					
 					
 			
 				}

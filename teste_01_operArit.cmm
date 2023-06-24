@@ -4,7 +4,8 @@ int c;
 
 void main() {  
     a = b = c = 42;
-    
+    a++;
+    --c;
     write (" a (1)=  ", a );
     write (" b (3)=  ", b );
     write (" c (14)=  ", c );
