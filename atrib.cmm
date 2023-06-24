@@ -1,0 +1,15 @@
+int a; 
+int b; 
+
+void main() {  
+    
+    a = 1;
+    b = a++ + ++a;
+    
+    do {
+        write (" a =  ", a++ );    
+    }
+    while( a < 10);
+
+}
+
