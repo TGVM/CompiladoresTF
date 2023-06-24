@@ -26,6 +26,7 @@ void main() {
 
 					if(atual < 2)
 						write("atual eh menor q 2");
+						atual = atual + 1;
 						continue;
 
     				write("Valor do somatorio de 1 a ", num);

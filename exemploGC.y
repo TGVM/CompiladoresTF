@@ -51,7 +51,7 @@ lcmd : lcmd cmd
 	   |
 	   ;
 	   
-cmd :  exp	';' {  System.out.println("\tPOPL %EDX"); 
+cmd :  exp	';' {  System.out.println("\tPOPL %EDX	"); 
 					     }
 		
 		| '{' lcmd '}' { System.out.println("\t\t# terminou o bloco..."); }
@@ -99,7 +99,7 @@ cmd :  exp	';' {  System.out.println("\tPOPL %EDX");
 											System.out.println("\tCMPL $0, %EAX");
 											System.out.printf("\tJE rot_%02d\n", (int)pRot.peek()+1);
 										} 
-				cmd		{
+				cmdWhile		{
 				  		System.out.printf("\tJMP rot_%02d   # terminou cmd na linha de cima\n", pRot.peek());
 							System.out.printf("rot_%02d:\n",(int)pRot.peek()+1);
 							pRot.pop();
@@ -138,7 +138,7 @@ cmd :  exp	';' {  System.out.println("\tPOPL %EDX");
 				System.out.printf("\tJMP rot_%02d\n", pRot.peek());
 				System.out.printf("rot_%02d:\n",pRot.peek() + 2);
 			}
-			')' cmd {
+			')' cmdFor {
 				System.out.printf("\tJMP rot_%02d\n", pRot.peek() + 3);
 				System.out.printf("rot_%02d:\n",pRot.peek() + 1);
 
@@ -167,7 +167,31 @@ ExpOpc: exp
 	}
 	;
 	 
-     
+cmdFor : cmd
+		| CONTINUE ';'{
+					//ir pro rótulo do laço
+					System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek());
+			
+				}
+		| BREAK ';'{
+					//ir pro rótulo de fora do laço
+					System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek() + 3);
+			
+				}
+		;
+
+cmdWhile : cmd
+		| CONTINUE ';'{
+					//ir pro rótulo do laço
+					System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek());
+			
+				}
+		| BREAK ';'{
+					//ir pro rótulo de fora do laço
+					System.out.printf("\tJMP rot_%02d   #break\n", (int)pRot.peek() + 1);
+			
+				}
+		;
      
 restoIf : ELSE  {
 					System.out.printf("\tJMP rot_%02d\n", pRot.peek()+1);
@@ -228,16 +252,7 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 		 					System.out.println("\tPUSHL %EDX");
   						   System.out.println("\tMOVL %EDX, _"+$1);
 					     }									
-		| CONTINUE{
-					//ir pro rótulo do laço
-					System.out.printf("\tJE rot_%02d\n", (int)pRot.peek());
-			
-				}
-		| BREAK {
-					//ir pro rótulo de fora do laço
-					System.out.printf("\tJE rot_%02d\n", (int)pRot.peek() + 1);
-			
-				}
+		
 		;							
 
 
@@ -348,7 +363,7 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 
 	public void gcExpLog(int oplog) {
 
-	   	System.out.println("\tPOPL %EDX");
+	   	System.out.println("\tPOPL %EDX #teste");
  		 	System.out.println("\tPOPL %EAX");
 
   	 	System.out.println("\tCMPL $0, %EAX");
@@ -374,9 +389,7 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 	}
 
    private void geraInicio() {
-			System.out.println(".text\n\n#\t Alessandra Ribeiro Schleder de Borba - 17200013-5 \n
-			Lucas Pereira Salbego - 17202261-8\n
-			Thiago Gomes Vidal de Mello - 18111112-1 \n#\n"); 
+			System.out.println(".text\n\n#\t Alessandra Ribeiro Schleder de Borba - 17200013-5 \nLucas Pereira Salbego - 17202261-8\nThiago Gomes Vidal de Mello - 18111112-1 \n#\n"); 
 			System.out.println(".GLOBL _start\n\n");  
    }
 
