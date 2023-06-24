@@ -91,7 +91,7 @@ cmd :  exp	';' {  System.out.println("\tPOPL %EDX	");
 								}
          
     | WHILE {
-					pRot.push(proxRot);  proxRot += 2;
+					pRot.push(proxRot);  proxRot += 2; isWhile=true;
 					System.out.printf("rot_%02d:\n",pRot.peek());
 				  } 
 			 '(' exp ')' {
@@ -99,7 +99,7 @@ cmd :  exp	';' {  System.out.println("\tPOPL %EDX	");
 											System.out.println("\tCMPL $0, %EAX");
 											System.out.printf("\tJE rot_%02d\n", (int)pRot.peek()+1);
 										} 
-				cmdWhile		{
+				cmd		{
 				  		System.out.printf("\tJMP rot_%02d   # terminou cmd na linha de cima\n", pRot.peek());
 							System.out.printf("rot_%02d:\n",(int)pRot.peek()+1);
 							pRot.pop();
@@ -120,9 +120,12 @@ cmd :  exp	';' {  System.out.println("\tPOPL %EDX	");
 			pRot.pop();
 							
 		} 
-	| FOR '(' ExpOpc ';' {
+	| {System.out.println("teste-1");}
+		FOR {System.out.println("Oscar Alho");}	'(' ExpOpc ';' {
+			System.out.println("teste1");
 			System.out.println("\tPOPL %EAX");
-			pRot.push(proxRot);  proxRot += 4;
+			System.out.println("teste2");
+			pRot.push(proxRot);  proxRot += 4; isWhile=false;
 			System.out.printf("rot_%02d:\n",pRot.peek());
 			} 
 			ExpOpc ';'
@@ -138,7 +141,7 @@ cmd :  exp	';' {  System.out.println("\tPOPL %EDX	");
 				System.out.printf("\tJMP rot_%02d\n", pRot.peek());
 				System.out.printf("rot_%02d:\n",pRot.peek() + 2);
 			}
-			')' cmdFor {
+			')' cmd {
 				System.out.printf("\tJMP rot_%02d\n", pRot.peek() + 3);
 				System.out.printf("rot_%02d:\n",pRot.peek() + 1);
 
@@ -167,31 +170,7 @@ ExpOpc: exp
 	}
 	;
 	 
-cmdFor : cmd
-		| CONTINUE ';'{
-					//ir pro rótulo do laço
-					System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek());
-			
-				}
-		| BREAK ';'{
-					//ir pro rótulo de fora do laço
-					System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek() + 3);
-			
-				}
-		;
 
-cmdWhile : cmd
-		| CONTINUE ';'{
-					//ir pro rótulo do laço
-					System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek());
-			
-				}
-		| BREAK ';'{
-					//ir pro rótulo de fora do laço
-					System.out.printf("\tJMP rot_%02d   #break\n", (int)pRot.peek() + 1);
-			
-				}
-		;
      
 restoIf : ELSE  {
 					System.out.printf("\tJMP rot_%02d\n", pRot.peek()+1);
@@ -252,7 +231,22 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 		 					System.out.println("\tPUSHL %EDX");
   						   System.out.println("\tMOVL %EDX, _"+$1);
 					     }									
-		
+		| CONTINUE {
+					//ir pro rótulo do laço
+					System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek());
+			
+				}
+
+		| BREAK {
+					//ir pro rótulo de fora do laço
+					if(isWhile){
+						System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek() + 1);
+					}else{
+						System.out.printf("\tJMP rot_%02d\n", (int)pRot.peek() + 2);
+					}
+					
+			
+				}
 		;							
 
 
@@ -268,6 +262,7 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
   private Stack<Integer> pRot = new Stack<Integer>();
   private int proxRot = 1;
 
+  private boolean isWhile = false;
 
   public static int ARRAY = 100;
 
